@@ -55,7 +55,9 @@
         <input type="text" placeholder="Enter letter content">
     </div>
     <button id="add-input" onclick="addInput()">+</button>
-    <button id="copy-button" onclick="generateAndCopyUrl()">Copy Link</button>
+    <button id="generate-button" onclick="shortenUrl()">Buat Link</button>
+    <button id="copy-button" onclick="copyShortUrl()" style="display: none;">Salin Link</button>
+    <div id="result"></div>
     <style>
         #copy-button {
             background: #ff6f91;
