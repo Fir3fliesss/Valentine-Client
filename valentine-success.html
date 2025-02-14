@@ -141,13 +141,11 @@
     <img id="hello-kitty" src="https://media.tenor.com/rRCSgVt0_-AAAAAi/hello-kitty.gif" alt="Hello Kitty GIF">
 
     <script>
-        // Function to get query parameter value by name
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
-        // Update text based on query parameters
         document.addEventListener('DOMContentLoaded', () => {
             const valentineMessage = getQueryParam('valentineMessage');
             const envelopeMessage = getQueryParam('envelopeMessage');
@@ -161,10 +159,14 @@
                 document.getElementById('click-me-text').textContent = envelopeMessage;
             }
 
-            // Update the envelope link to include letters parameter
-            const envelopeLink = document.querySelector('a[href="envelope.html"]');
-            if (envelopeLink && letters) {
-                envelopeLink.href = `envelope.html?letters=${letters}`;
+            // Update the envelope link to include all parameters
+            const envelopeLink = document.querySelector('a[href="Valentine-Client/envelope.html"]');
+            if (envelopeLink) {
+                const url = new URL('/Valentine-Client/envelope.html', window.location.origin);
+                if (letters) url.searchParams.set('letters', letters);
+                if (valentineMessage) url.searchParams.set('valentineMessage', valentineMessage);
+                if (envelopeMessage) url.searchParams.set('envelopeMessage', envelopeMessage);
+                envelopeLink.href = url.toString();
             }
         });
     </script>

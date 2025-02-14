@@ -330,39 +330,52 @@
             `<p>Selamat Hari Kasih Sayang, Wanodya Dikara Diranda Nirmala Binar-mu Amerta.</p>`
         ];
 
-        const letterContent = JSON.parse(getQueryParam('letters') || '[]');
+        let letterContent = [];
+        try {
+            const lettersParam = getQueryParam('letters');
+            if (lettersParam) {
+                letterContent = JSON.parse(lettersParam).map(letter =>
+                    decodeURIComponent(letter)
+                );
+            }
+        } catch (e) {
+            console.error('Error parsing letters:', e);
+        }
+
         const letters = letterContent.length > 0 ? letterContent : defaultLetters;
         let currentLetterIndex = 0;
 
       // Update konten letter dan tombol navigasi
       function updateLetterContent() {
-        messageContainer.html(letters[currentLetterIndex]);
-        const prevDisabled = currentLetterIndex === 0 ? 'disabled' : '';
-        const nextDisabled = currentLetterIndex === letters.length - 1 ? 'disabled' : '';
-        const navHtml = `
-          <div class="nav-buttons">
-            <button id="prev-letter" ${prevDisabled}>Previous</button>
-            <button id="next-letter" ${nextDisabled}>Next</button>
-          </div>
-        `;
-        if ($('.nav-buttons').length) {
-          $('.nav-buttons').replaceWith(navHtml);
-        } else {
-          letter.append(navHtml);
+        if (letters && letters.length > 0) {
+            messageContainer.html(letters[currentLetterIndex]);
+            const prevDisabled = currentLetterIndex === 0 ? 'disabled' : '';
+            const nextDisabled = currentLetterIndex === letters.length - 1 ? 'disabled' : '';
+            const navHtml = `
+                <div class="nav-buttons">
+                    <button id="prev-letter" ${prevDisabled}>Previous</button>
+                    <button id="next-letter" ${nextDisabled}>Next</button>
+                </div>
+            `;
+            if ($('.nav-buttons').length) {
+                $('.nav-buttons').replaceWith(navHtml);
+            } else {
+                letter.append(navHtml);
+            }
         }
       }
 
       // Buka envelope & tampilkan letter popup dengan konten pertama
       function openEnvelope() {
         envelope.removeClass("close").addClass("open");
-        backgroundMusic.play();
-        // Reset index letter ke awal
+        if (backgroundMusic) {
+            backgroundMusic.play().catch(() => {});
+        }
         currentLetterIndex = 0;
-        // Tambahkan class popup untuk letter dan update konten
         setTimeout(function() {
-          letter.addClass("popup");
-          updateLetterContent();
-        }, 800); // delay disesuaikan dengan animasi amplop
+            letter.addClass("popup");
+            updateLetterContent();
+        }, 800);
       }
 
       // Tutup envelope dan reset konten letter
