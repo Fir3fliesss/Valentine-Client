@@ -45,7 +45,7 @@
             const currentUrl = new URL(window.location.href);
             const params = currentUrl.searchParams;
 
-            const newUrl = new URL('valentine-success.html', window.location.origin);
+            const newUrl = new URL('valentine-success.html/Valentine-Client/', window.location.origin);
             // Copy all existing query parameters
             params.forEach((value, key) => {
                 newUrl.searchParams.set(key, value);
