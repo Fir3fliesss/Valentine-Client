@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your Message</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff5f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .dynamic-inputs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #add-input {
+            background: #ff6f91;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customize Your Valentine's Message</h1>
+    <img src="assets/gambar-1.png" alt="Image 1">
+    <input type="text" id="valentineMessage" placeholder="Happy Valentine's Day">
+    <input type="text" id="envelopeMessage" placeholder="Buka Envelope nya">
+    <img src="assets/gambar-2.png" alt="Image 2">
+
+    <div class="dynamic-inputs" id="dynamicInputs">
+        <input type="text" placeholder="Enter letter content">
+    </div>
+    <button id="add-input" onclick="addInput()">+</button>
+    <button id="copy-button" onclick="generateAndCopyUrl()">Copy Link</button>
+    <style>
+        #copy-button {
+            background: #ff6f91;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #copy-button:hover {
+            background: #ff5c82;
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <script src="input.js"></script>
+</body>
+</html>

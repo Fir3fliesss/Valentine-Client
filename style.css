@@ -1,0 +1,136 @@
+/* Reset defaults */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* Body styling */
+body {
+    text-align: center;
+    background: #ffdde1 url(./assets/nVVaZgV.jpg) no-repeat center center fixed; /* Soft pink background with the image */
+    background-size: cover; /* Ensures the image covers the entire background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
+}
+
+/* Main heading */
+#heading {
+    font-size: 40px; /* Smaller for a retro feel */
+    color: #f06f8d; /* Lighter pastel pink */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Game canvas */
+#canvas {
+    background: #fff;
+    display: block;
+    border-radius: 10px;
+    margin-top: 20px;
+    border: 5px solid #fba2b7; /* Pastel pink border */
+    box-shadow: 0 0 10px rgba(255, 111, 145, 0.3); /* Reduced glow effect */
+}
+
+/* Start and Game Over screens */
+#start-screen,
+#game-over-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 221, 225, 0.9); /* Semi-transparent pink */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide the game-over-screen by default */
+#game-over-screen {
+    display: none;
+}
+
+/* Buttons styling */
+#start-screen button,
+#game-over-screen button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    background: #ff6f91;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#start-screen button:hover,
+#game-over-screen button:hover {
+    background: #ff4d6d;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 600px) {
+    #canvas {
+        padding: 10px; /* Add padding to the canvas */
+    }
+
+    #heading {
+    font-size: 30px;
+    color: #f06f8d; /* Lighter pastel pink */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+
+    #start-screen,
+    #game-over-screen {
+        width: 90%; /* Adjust width for mobile screens */
+        max-width: none; /* Remove the maximum width */
+        padding: 15px; /* Adjust padding */
+    }
+
+    #controls {
+        display: grid;
+        grid-template-columns: repeat(3, 50px);
+        grid-template-rows: repeat(3, 50px);
+        gap: 5px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .control-button {
+        width: 50px;
+        height: 50px;
+        background: url('./assets/arrow.jpg') no-repeat center center;
+        background-size: cover;
+    }
+
+    .control-button.up {
+        grid-column: 2;
+        grid-row: 1;
+        transform: rotate(-90deg);
+    }
+
+    .control-button.left {
+        grid-column: 1;
+        grid-row: 2;
+        transform: rotate(180deg);
+    }
+
+    .control-button.right {
+        grid-column: 3;
+        grid-row: 2;
+        transform: rotate(0deg);
+    }
+
+    .control-button.down {
+        grid-column: 2;
+        grid-row: 3;
+        transform: rotate(90deg);
+    }
+}

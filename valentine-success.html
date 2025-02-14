@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>You Win!</title>
+    <style>
+        body {
+            background: url('./assets/nVVaZgV.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Press Start 2P', cursive;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ff6f91;
+            font-size: 2rem;
+            margin: 0 0 1rem 0;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #game-success-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            justify-content: center; /* Center content vertically */
+            background: rgba(255, 221, 225, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 600px;
+            margin: 20px 0;
+        }
+
+        #click-me-text {
+            font-size: 1rem;
+            color: #ff6f91;
+            margin-top: 50px;
+        }
+
+        #gift-image {
+            max-width: 150px;
+            height: auto;
+            margin: 1rem 0;
+        }
+
+        #envelope-button {
+            max-width: 200px;
+            width: 100%;
+            height: 200px;
+            transition: transform 0.3s ease;
+            animation: bounce 2s infinite; /* Add bounce animation */
+        }
+
+        #envelope-button:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        #hello-kitty {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin-top: 2rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #game-success-screen {
+                padding: 1.5rem;
+            }
+
+            #gift-image {
+                max-width: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            #game-success-screen {
+                padding: 1rem;
+            }
+
+            #hello-kitty {
+                max-width: 200px;
+            }
+
+            #envelope-button {
+                max-width: 150px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            body {
+                justify-content: flex-start;
+                padding-top: 40px;
+            }
+
+            #hello-kitty {
+                display: none;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-success-screen">
+        <h1 id="valentine-text">Happy Valentine's Day! <br> Sayang ku<3</h1>
+        <div id="click-me-text">Buka Envelope nya yaaa:3</div>
+        <a href="envelope.html">
+            <img src="./assets/button-removebg-preview.png" alt="Open Envelope" id="envelope-button">
+        </a>
+    </div>
+    <img id="hello-kitty" src="https://media.tenor.com/rRCSgVt0_-AAAAAi/hello-kitty.gif" alt="Hello Kitty GIF">
+
+    <script>
+        // Function to get query parameter value by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Update text based on query parameters
+        document.addEventListener('DOMContentLoaded', () => {
+            const valentineMessage = getQueryParam('valentineMessage');
+            const envelopeMessage = getQueryParam('envelopeMessage');
+            const letters = getQueryParam('letters');
+
+            if (valentineMessage) {
+                document.getElementById('valentine-text').innerHTML = valentineMessage;
+            }
+
+            if (envelopeMessage) {
+                document.getElementById('click-me-text').textContent = envelopeMessage;
+            }
+
+            // Update the envelope link to include letters parameter
+            const envelopeLink = document.querySelector('a[href="envelope.html"]');
+            if (envelopeLink && letters) {
+                envelopeLink.href = `envelope.html?letters=${letters}`;
+            }
+        });
+    </script>
+</body>
+</html>

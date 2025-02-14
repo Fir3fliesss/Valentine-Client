@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pink Envelope</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+  <style>
+    /* Reset dasar */
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: var(--color-bg);
+    }
+    :root {
+      --color-env: #FFB7C5;
+      --color-env2: #ff9aad;
+      --color-flap: #ff8da1;
+      --color-bg: #fff5f7;
+      --color-heart: #ff85a2;
+      --color-sparkle: #fff;
+      --wax-red: #c04040;
+    }
+    /* Container utama */
+    .parent {
+      background-color: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 100%;
+      padding: 20px 0;
+    }
+    .container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    /* Style amplop */
+    #envelope {
+      position: relative;
+      width: 280px;
+      height: 180px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      margin: 50px auto;
+      background-color: var(--color-flap);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      cursor: pointer;
+      overflow: visible; /* Supaya letter popup dapat muncul di luar amplop */
+    }
+    .front {
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: 3;
+    }
+    .flap {
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-bottom: 82px solid transparent;
+      border-top: 98px solid var(--color-flap);
+      transform-origin: top;
+      pointer-events: none;
+    }
+    .pocket {
+      border-left: 140px solid var(--color-env);
+      border-right: 140px solid var(--color-env);
+      border-bottom: 90px solid var(--color-env2);
+      border-top: 90px solid transparent;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+    /* Style letter awal (di dalam amplop) */
+    .letter {
+      position: relative;
+      background-color: #fff;
+      width: 90%;
+      margin: 0 auto;
+      height: 90%;
+      top: 5%;
+      border-radius: 6px;
+      box-shadow: 0 2px 26px rgba(0,0,0,0.08);
+      padding: 15px;
+      box-sizing: border-box;
+      transition: all 0.4s ease;
+    }
+    .letter:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image: linear-gradient(180deg,
+          rgba(255,255,255,0.00) 25%,
+          rgba(255,231,236,0.70) 55%,
+          rgba(255,231,236,1.00) 100%);
+      pointer-events: none;  /* Agar tidak menghalangi klik */
+    }
+    .message {
+      position: relative;
+      z-index: 2;
+      font-family: 'Handlee', cursive;
+      color: #d46a84;
+      text-align: center;
+      line-height: 1.3;
+      padding-top: 0;
+    }
+    .message p {
+      margin: 10px 0;
+      font-size: 1.8em;
+      text-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    }
+    /* Animasi buka/tutup amplop */
+    .open .flap {
+      transform: rotateX(180deg);
+      transition: transform 0.4s ease, z-index 0.6s;
+      z-index: 1;
+    }
+    .close .flap {
+      transform: rotateX(0deg);
+      transition: transform 0.4s 0.6s ease, z-index 1s;
+      z-index: 5;
+    }
+    .close .letter {
+      transform: translateY(0);
+      transition: transform 0.4s ease, z-index 1s;
+      z-index: 1;
+    }
+    .open .letter {
+      transform: translateY(-60px) rotate(-2deg);
+      transition: transform 0.4s 0.6s ease, z-index 0.6s;
+      z-index: 2;
+    }
+    .letter-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffd1dc;
+      border-radius: 5px;
+      z-index: 3;
+    }
+    .corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+    .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+    .hearts, .sparkles {
+      position: absolute;
+      top: 90px;
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+    .heart, .sparkle {
+      position: absolute;
+      bottom: 0;
+      pointer-events: none;
+    }
+    .heart:before,
+    .heart:after {
+      content: "";
+      position: absolute;
+      left: 25px;
+      top: 0;
+      width: 25px;
+      height: 40px;
+      background: var(--color-heart);
+      border-radius: 25px 25px 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+    .heart:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+    .sparkle {
+      width: 8px;
+      height: 8px;
+      background: var(--color-sparkle);
+      border-radius: 50%;
+      animation: sparkleTwinkle 1s infinite;
+    }
+    .close .heart,
+    .close .sparkle {
+      opacity: 0;
+      animation: none;
+    }
+    @keyframes sparkleTwinkle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+    }
+    /* Popup letter: posisi fixed, lebar memenuhi layar dengan margin, tinggi menyesuaikan konten */
+    .letter.popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 40px);
+      height: auto;
+      max-height: 80vh;
+      overflow-y: auto;
+      border-radius: 15px;
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+      z-index: 20;
+      background-color: #fff;
+      padding: 20px;
+    }
+    /* Navigation untuk berganti letter */
+    .nav-buttons {
+      text-align: center;
+      margin-top: 20px;
+      position: relative;
+      z-index: 5;
+    }
+    .nav-buttons button {
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background-color: var(--color-env);
+      border: 2px solid var(--color-env2);
+      border-radius: 20px;
+      color: white;
+      padding: 8px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      font-family: Arial, sans-serif;
+    }
+    .nav-buttons button:hover {
+      background-color: var(--color-env2);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 7px 25px rgba(0,0,0,0.2);
+    }
+    /* Tombol reset (Close Envelope) */
+    .reset {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .reset button {
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background-color: var(--color-env);
+      border: 2px solid var(--color-env2);
+      border-radius: 20px;
+      color: white;
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      font-family: Arial, sans-serif;
+    }
+    .reset button:hover {
+      background-color: var(--color-env2);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 7px 25px rgba(0,0,0,0.2);
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      #envelope {
+        width: 280px;
+        height: 200px;
+      }
+      .letter {
+        width: 90%;
+        height: 90%;
+      }
+      .message p {
+        font-size: 1.6em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Musik latar (optional) -->
+  <!-- <audio id="background-music" loop>
+    <source src="./assets/Nidji - Rahasia Hati  Speed Up  Reverb.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> -->
+  <div class="parent">
+    <div class="container">
+      <div class="envelope-wrapper">
+        <div id="envelope" class="close">
+          <div class="wax-seal"></div>
+          <div class="front flap"></div>
+          <div class="front pocket"></div>
+          <div class="letter">
+            <!-- Konten message akan diupdate secara dinamis -->
+            <div class="message"></div>
+            <!-- Tombol navigasi letter akan disisipkan di sini -->
+          </div>
+        </div>
+      </div>
+      <div class="reset">
+        <button id="open">Open Envelope</button>
+        <button id="reset">Close Envelope</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        const envelope = $('#envelope');
+        const btnOpen = $("#open");
+        const btnReset = $("#reset");
+        const backgroundMusic = document.getElementById('background-music');
+        const letter = $('.letter');
+        const messageContainer = $('.message');
+
+        // Get letters from URL parameters
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Initialize letters array with either query parameters or default content
+        const defaultLetters = [
+            `<p>Dear My Vellina Adhisty<33,</p>
+             <p>Di bawah baswara yang lembut, Asmaraloka berpendar dalam renjana, Seperti lembayung yang merekah di bumantara, Menghiasi swastamita dengan pesona afsun.</p>`,
+            `<p>Kau adalah kanagara di singgasana hati, Adiwarna dalam setiap senandika,</p>`,
+            `<p>Sementara aku bagai jenggala sunyi, Menjaga nuraga dalam dewana yang lirih.</p>`,
+            `<p>Dalam sandyakala yang temaram, Kubiarkan lazuardi menari bersama arunika, Sebab cinta tak perlu tergesa, Hanya perlu nirmala untuk tetap ada.</p>`,
+            `<p>Selamat Hari Kasih Sayang, Wanodya Dikara Diranda Nirmala Binar-mu Amerta.</p>`
+        ];
+
+        const letterContent = JSON.parse(getQueryParam('letters') || '[]');
+        const letters = letterContent.length > 0 ? letterContent : defaultLetters;
+        let currentLetterIndex = 0;
+
+      // Update konten letter dan tombol navigasi
+      function updateLetterContent() {
+        messageContainer.html(letters[currentLetterIndex]);
+        const prevDisabled = currentLetterIndex === 0 ? 'disabled' : '';
+        const nextDisabled = currentLetterIndex === letters.length - 1 ? 'disabled' : '';
+        const navHtml = `
+          <div class="nav-buttons">
+            <button id="prev-letter" ${prevDisabled}>Previous</button>
+            <button id="next-letter" ${nextDisabled}>Next</button>
+          </div>
+        `;
+        if ($('.nav-buttons').length) {
+          $('.nav-buttons').replaceWith(navHtml);
+        } else {
+          letter.append(navHtml);
+        }
+      }
+
+      // Buka envelope & tampilkan letter popup dengan konten pertama
+      function openEnvelope() {
+        envelope.removeClass("close").addClass("open");
+        backgroundMusic.play();
+        // Reset index letter ke awal
+        currentLetterIndex = 0;
+        // Tambahkan class popup untuk letter dan update konten
+        setTimeout(function() {
+          letter.addClass("popup");
+          updateLetterContent();
+        }, 800); // delay disesuaikan dengan animasi amplop
+      }
+
+      // Tutup envelope dan reset konten letter
+      function closeEnvelope() {
+        envelope.removeClass("open").addClass("close");
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        letter.removeClass("popup");
+        // Hapus konten letter dan navigasi
+        messageContainer.empty();
+        $('.nav-buttons').remove();
+      }
+
+      // Event tombol Open dan Close Envelope
+      btnOpen.on('click', function() {
+        openEnvelope();
+      });
+      btnReset.on('click', function() {
+        closeEnvelope();
+      });
+
+      // Event delegasi untuk tombol Previous dan Next
+      $(document).on('click', '#prev-letter', function() {
+        if (currentLetterIndex > 0) {
+          currentLetterIndex--;
+          updateLetterContent();
+        }
+      });
+      $(document).on('click', '#next-letter', function() {
+        if (currentLetterIndex < letters.length - 1) {
+          currentLetterIndex++;
+          updateLetterContent();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
