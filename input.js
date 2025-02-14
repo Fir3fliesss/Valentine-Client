@@ -43,7 +43,7 @@ function submitMessages() {
         `<p>${input.value}</p>`
     ).filter(text => text.trim() !== '<p></p>'); // Remove empty inputs
 
-    const url = new URL('index.html', window.location.origin);
+    const url = new URL('/Valentine-Client/index.html', window.location.origin);
     url.searchParams.set('valentineMessage', valentineMessage);
     url.searchParams.set('envelopeMessage', envelopeMessage);
     url.searchParams.set('letters', JSON.stringify(letters));
